@@ -127,8 +127,8 @@ angular.module 'Goose'
     strFrameName = "printThis-" + (new Date()).getTime()
 
     if (window.location.hostname != document.domain && navigator.userAgent.match(/msie/i))
-      # Ugly IE hacks due to IE not inheriting document.domain from parent
-      # checks if document.domain is set by comparing the host name against document.domain
+#     Ugly IE hacks due to IE not inheriting document.domain from parent
+#     checks if document.domain is set by comparing the host name against document.domain
       iframeSrc = "javascript:document.write(\"<head><script>document.domain=\\\" #{document.domain}\\\";</script></head><body></body>\")"
       printI = document.createElement('iframe')
       printI.name = "printIframe"
@@ -138,13 +138,13 @@ angular.module 'Goose'
       printI.src = iframeSrc
 
     else
-      #other browsers inherit document.domain, and IE works if document.domain is not explicitly set
+#     other browsers inherit document.domain, and IE works if document.domain is not explicitly set
       $frame = angular.element("<iframe id='" + strFrameName + "' name='printIframe' />")
       angular.element(document.body).append($frame)
 
     $iframe = angular.element(document.getElementById(strFrameName))
 
-    #show frame if in debug mode
+#   show frame if in debug mode
     if (!opt.debug)
       $iframe.css(
         position: "absolute"
@@ -153,9 +153,9 @@ angular.module 'Goose'
         left: "-600px"
         top: "-600px"
       )
-    #$iframe.ready() and $iframe.load were inconsistent between browsers
+#   $iframe.ready() and $iframe.load were inconsistent between browsers
     $timeout(() ->
-      #Add doctype to fix the style difference between printing and render
+#     Add doctype to fix the style difference between printing and render
       setDocType = ($iframe, doctype) ->
         win = $iframe[0]
         win = win.contentWindow || win.contentDocument || win
@@ -168,50 +168,33 @@ angular.module 'Goose'
       $doc = $iframe.contents()
       $head = $doc.find("head")
       $body = $doc.find("body")
-      #add base tag to ensure elements use the parent domain
+#     add base tag to ensure elements use the parent domain
       $head.append('<base href="' + document.location.protocol + '//' + document.location.host + '">')
 
-#      TODO translate into coffee+angular
-#      if (opt.importCSS) $("link[rel=stylesheet]").each(function() {
-#        var href = $(this).attr("href");
-#        if (href) {
-#        var media = $(this).attr("media") || "all";
-#          $head.append("<link type='text/css' rel='stylesheet' href='" + href + "' media='" + media + "'>")
-#        }
-#      });
-
-      #add title of the page
+#     add title of the page
       if (opt.pageTitle)
         $head.append("<title>" + opt.pageTitle + "</title>")
 
-      #    TODO import additional stylesheet(s)
-      #    if (opt.loadCSS) {
-      #      if( $.isArray(opt.loadCSS)) {
-      #        jQuery.each(opt.loadCSS, function(index, value) {
-      #          $head.append("<link type='text/css' rel='stylesheet' href='" + this + "'>");
-      #        });
-      #      } else {
-      #        $head.append("<link type='text/css' rel='stylesheet' href='" + opt.loadCSS + "'>");
-      #      }
-      #    }
+#     TODO import additional stylesheet(s)
 
-      #print header
+
+#     print header
       if (opt.header)
         $body.append(opt.header)
-      #grab $.selector as container
+#     grab $.selector as container
       if (opt.printContainer)
         $body.append($element.parent().clone())
-      #otherwise just print interior elements of container
+#     otherwise just print interior elements of container
       else
         angular.forEach($element, (value) ->
           $body.append(angular.element(value).html())
         )
 
-      #capture form/field values
+#     capture form/field values
       $timeout(() ->
         if ($iframe.hasClass("MSIE"))
-          #check if the iframe was created with the ugly hack
-          #and perform another ugly hack out of neccessity
+#         check if the iframe was created with the ugly hack
+#         and perform another ugly hack out of neccessity
           window.frames["printIframe"].focus();
           $head.append("<script>  window.print(); </script>");
         else
