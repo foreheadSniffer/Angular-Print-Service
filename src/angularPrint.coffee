@@ -1,103 +1,6 @@
-angular.module 'Goose'
-.directive 'vedAccreditationForm', ['$http', ($http) ->
-  scope: true
-  link: (scope, element, attr) ->
-    scope.eventSlug = attr.vedAccreditationFormEventSlug
-    scope.send = () ->
-      if scope.rules
-        $http.post "/scripts/events/#{scope.eventSlug}/request_accreditations", { attributes: scope.attributes }
-        .then (response) ->
-          console.log response
-          scope.currentTab += 1
-
-]
-.directive 'smoothScroll', ['$log', '$timeout', '$window', ($log, $timeout, $window) ->
-#  May the Math be with you
-  easing = (t, b, c, d) ->
-    t /= d/2;
-    if (t < 1)
-      return c/2*t*t + b
-    t-=1
-    return -c/2 * (t*(t-2) - 1) + b
-
-  elmYPosition = (eID) ->
-    elm = document.getElementById(eID)
-    if elm
-      y = elm.offsetTop
-      node = elm
-      while node.offsetParent and node.offsetParent isnt document.body
-        node = node.offsetParent
-        y += node.offsetTop
-      return y
-    0
-  requestAnimFrame = (() ->
-    return  window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame || (callback) -> window.setTimeout(callback, 1000 / 60)
-  )()
-
-  scrollTo = (element, offset, callback, duration = 500) ->
-    to = elmYPosition(element) - offset
-    move = (amount) ->
-      document.documentElement.scrollTop = amount
-      document.body.parentNode.scrollTop = amount
-      document.body.scrollTop = amount
-
-    position = () ->
-      return document.documentElement.scrollTop || document.body.parentNode.scrollTop || document.body.scrollTop
-
-    start = position()
-    change = to - start
-    currentTime = 0
-    increment = 20
-
-    animateScroll = () ->
-
-      currentTime += increment;
-      val = easing(currentTime, start, change, duration);
-      move(val)
-      if (currentTime < duration)
-        requestAnimFrame(animateScroll)
-      else
-        if (callback && typeof(callback) == 'function')
-          callback()
-
-    animateScroll()
-
-  restrict: 'A'
-  link: (scope, element, attr) ->
-    element.bind 'click', ->
-      if attr.target
-        offset = attr.offset or 30
-        scrollTo(attr.target, offset, null, 1000)
-      else
-        $log.warn 'Smooth scroll: no target specified'
-]
-
-# NUM2STR FILTER
-.filter 'num2str', ()->
-  return (n, text_forms)->
-    n2 = Math.abs(n) % 100
-    n1 = n % 10
-    if (n2 > 10 && n2 < 20)
-      return "#{n} #{text_forms[2]}"
-    if (n1 > 1 && n1 < 5)
-      return "#{n} #{text_forms[1]}"
-    if (n1 == 1)
-      return "#{n} #{text_forms[0]}"
-    return "#{n} #{text_forms[2]}"
-
-# SEARCH FACTORY
-.factory 'Search', ['$http', '$httpParamSerializer', ($http, $httpParamSerializer)->
-  find: (params, page='index') ->
-    $http.get("/scripts/pages/#{page}?#{$httpParamSerializer(params)}")
-
-]
-
-# PRINT FACTORY
-
-.factory 'Print', ['$timeout', ($timeout) ->
-  print: (node, options = {}) ->
-
+angular.module 'angularPrint', []
+.service 'AngularPrint', ['$timeout', ($timeout) ->
+  (node, options = {}) ->
     defaults =
 #      show the iframe for debugging
       debug: false
@@ -124,7 +27,7 @@ angular.module 'Goose'
 
     opt = angular.extend({}, defaults, options)
     $element = angular.element(node)
-    strFrameName = "printThis-" + (new Date()).getTime()
+    strFrameName = "printingAt-" + (new Date()).getTime()
 
     if (window.location.hostname != document.domain && navigator.userAgent.match(/msie/i))
 #     Ugly IE hacks due to IE not inheriting document.domain from parent
@@ -175,9 +78,30 @@ angular.module 'Goose'
       if (opt.pageTitle)
         $head.append("<title>" + opt.pageTitle + "</title>")
 
+
+#     import stylesheets
 #     TODO import additional stylesheet(s)
+      if (opt.importCSS) 
+        angular.forEach document.querySelectorAll("link[rel=stylesheet]"), (elem) ->
+          href = angular.element(elem).attr("href")
+          if (href)
+              media = angular.element(elem).attr("media") || "all";
+              $head.append("<link type='text/css' rel='stylesheet' href='" + href + "' media='" + media + "'>")
+            
+#     import style tags
+      if (opt.importStyle) 
+        angular.forEach document.querySelectorAll("style"), (elem) ->
+          $head.append angular.element(elem).clone()
 
 
+#     import additional stylesheet(s)
+      if (opt.loadCSS) 
+        if angular.isArray(opt.loadCSS)
+          angular.forEach opt.loadCSS, (href) ->
+            $head.append("<link type='text/css' rel='stylesheet' href='#{href}'>")
+        else
+          $head.append("<link type='text/css' rel='stylesheet' href='#{opt.loadCSS}'>")
+        
 #     print header
       if (opt.header)
         $body.append(opt.header)
@@ -186,11 +110,51 @@ angular.module 'Goose'
         $body.append($element.parent().clone())
 #     otherwise just print interior elements of container
       else
-        angular.forEach($element, (value) ->
+        angular.forEach $element, (value) ->
           $body.append(angular.element(value).html())
-        )
 
-#     capture form/field values
+      if (opt.formValues)
+#       loop through inputs
+        $input = $element.find('input')
+        if ($input.length) 
+          angular.forEach $input, (elem)->
+            $this = angular.element elem
+            $name = $this.attr('name')
+            $checker = elem.type && (elem.type.toLowerCase() == 'checkbox' || elem.type.toLowerCase() == 'radio')
+            $iframeInput = angular.element $doc[0].querySelector('input[name="' + $name + '"]')
+            $value = $this.val()
+            # TODO: Refactor with switch/when statement
+            if (!$checker)
+              $iframeInput.val($value)
+            else if elem.checked
+              if elem.type && elem.type.toLowerCase() == 'checkbox'
+                $iframeInput.attr('checked', 'checked');
+              else if elem.type && elem.type.toLowerCase() == 'radio'
+                $doc.find('input[name="' + $name + '"][value=' + $value + ']').attr('checked', 'checked');
+        
+#       loop through selects
+        $select = $element.find('select')
+        if ($select.length)
+            angular.forEach $select, (select) ->
+              $this = angular.element(select)
+              $name = $this.attr('name')
+              $value = $this.val()
+              angular.element($doc[0].querySelector('select[name="' + $name + '"]')).val($value)
+
+#       loop through textareas
+        $textarea = $element.find('textarea')
+        if ($textarea.length)
+            angular.forEach $textarea, (textarea) ->
+              $this = angular.element(textarea)
+              $name = $this.attr('name')
+              $value = $this.val()
+              angular.element($doc[0].querySelector('textarea[name="' + $name + '"]')).val($value)
+    
+#     remove inline styles
+      if (opt.removeInline)
+        angular.forEach $doc[0].querySelectorAll('body *[style]'), (elem) ->
+          angular.element(elem).removeAttr('style')
+
       $timeout(() ->
         if ($iframe.hasClass("MSIE"))
 #         check if the iframe was created with the ugly hack
@@ -209,6 +173,7 @@ angular.module 'Goose'
 #        remove iframe after print
         if (!opt.debug)
             setTimeout(() ->
+              # resolving time
               $iframe.remove()
             ,1000)
       , opt.printDelay)

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<title>Printing</title>
+	<link href="https://fonts.googleapis.com/css?family=PT+Serif" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="example.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+	<script type="text/javascript" src="../dist/angularPrint.js"></script>
+	<script type="text/javascript" src="main.js"></script>
+</head>
+<body ng-controller="exampleController as ctrl">
+	<div class="wrapper">
+		<div class="sidebar">
+			<div class="menu">
+				<div class="menu__input">
+					<input type="text" name="selctor" ng-model="selector" placeholder="enter selector"> <button ng-click="ctrl.selectDiv(selector)">Print</button>
+				</div>
+				<div class="menu__button">
+					
+				</div>
+				<div class="menu-element">
+					<a href="#">Home</a>
+				</div>
+				<div class="menu-element">
+					<a href="#">About</a>
+				</div>
+				<div class="menu-element">
+					<a href="#">Projects</a>
+				</div>
+				<div class="menu-element">
+					<a href="#">Demos</a>
+				</div>
+				<div class="menu-element">
+					<a href="#">Blog</a>
+				</div>
+			</div>
+		</div>
+		<div class="content">
+			<section id="one">
+				<h1>Section one <span class="hint" ng-click="selector='#one'">#one</span></h1>
+				<p>
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc efficitur vulputate augue vitae ullamcorper. Nullam nec nibh lorem. Nullam et massa id est dapibus dignissim eu vitae leo. Praesent lacinia tincidunt lobortis. Nam non risus vel quam convallis pharetra ac sed mi. Suspendisse orci libero, lacinia et nisl sed, auctor consectetur elit. Maecenas ac diam ac mauris euismod venenatis. Curabitur dapibus lorem id leo fermentum, et tincidunt metus placerat. Phasellus diam dui, maximus sit amet erat luctus, dapibus rhoncus nisl. Maecenas pharetra laoreet nunc feugiat convallis.
+				</p>
+				<p>
+					Sed rhoncus diam mi, sit amet dapibus quam dignissim et. Pellentesque cursus massa in tortor facilisis, sit amet accumsan erat posuere. Praesent finibus metus dolor, eu commodo nisi elementum nec. Donec elit mi, consequat eget elit vitae, semper iaculis lorem. Nunc ut tortor orci. Curabitur pharetra nunc id nulla semper pretium vel vitae sapien. Etiam egestas condimentum egestas. Proin fringilla ex rhoncus lobortis semper. Pellentesque vel augue pellentesque, interdum nibh non, egestas nibh. Phasellus lobortis dapibus sem, id dictum massa finibus ac. Donec pellentesque elit lobortis rhoncus ultrices. Quisque ultrices massa erat, at laoreet quam pretium imperdiet.
+				</p>
+				<p>
+					Nullam auctor elit at ante porta sollicitudin. Morbi maximus efficitur blandit. Morbi ornare tellus in laoreet rhoncus. Morbi pretium diam sed orci consequat consectetur. Donec porta ex nulla, eu pretium dui suscipit in. Phasellus gravida nisi sed nisl vehicula commodo. Mauris suscipit eu dolor vel viverra. Quisque posuere velit ante, in facilisis risus mattis ac. Nullam porta, nunc a congue scelerisque, arcu nulla faucibus purus, nec semper libero dolor sit amet lacus.
+				</p>
+				<p>
+					Duis at magna sed ex ullamcorper tempus. Aliquam pellentesque sem quis aliquam pharetra. Vivamus ac odio blandit, molestie orci at, euismod lacus. In lobortis et lacus vitae luctus. Vestibulum id purus vel augue pharetra tincidunt dapibus sit amet quam. Mauris aliquam, mauris sit amet efficitur rutrum, odio ante convallis odio, at sollicitudin dolor mauris ut justo. Nam nec turpis lectus. Nullam non arcu enim. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse molestie lacus arcu. Fusce ex enim, aliquam a augue ac, lacinia tincidunt eros.
+				</p>
+				<p>
+					Donec porttitor enim quis velit mollis vulputate. Curabitur vel dapibus diam. Mauris lobortis dui nibh, non consequat sapien porttitor rutrum. Vestibulum pellentesque, eros ut cursus malesuada, nisl odio egestas massa, ut dignissim sapien lectus sed nulla. Vivamus semper mollis justo, nec pharetra nisi interdum ac. Duis iaculis commodo accumsan. Fusce aliquam porta fringilla. Nunc mattis dignissim mi, sit amet porttitor arcu mollis sit amet. Quisque quis elementum mauris, vel consequat ex. Fusce et dui id ex luctus bibendum.
+				</p>
+			</section>
+			<section id="two">
+				<h1>Section two <span class="hint" ng-click="selector='#two'">#two</span></h1>
+				<img src="http://lorempixel.com/120/180/" class="image image--small">
+				<p>
+					Cras commodo lacus quam, eu convallis sem dictum id. Maecenas imperdiet tincidunt tempus. Phasellus id nunc ultrices, ullamcorper dui id, blandit nisl. Etiam sit amet venenatis tellus. Nunc euismod metus nec laoreet maximus. Donec lectus lacus, maximus non enim vitae, consectetur consequat augue. Morbi placerat lacinia enim, eget fermentum orci vehicula dignissim. Etiam sagittis ligula at neque imperdiet, non lacinia erat pellentesque.
+				</p>
+				<p>
+					In sodales, felis in sodales fermentum, odio ipsum venenatis justo, sed efficitur diam felis ut purus. Cras pretium sollicitudin ipsum, eu posuere justo euismod eget. Praesent neque eros, varius vel turpis ac, convallis mattis urna. Praesent sodales eget risus vitae interdum. Maecenas vestibulum justo vel tincidunt varius. Suspendisse nec suscipit neque. Suspendisse vitae nulla ligula. Integer sit amet erat ut orci vulputate ultrices quis non nisl. Nulla eleifend accumsan ligula et aliquet. Praesent enim massa, vulputate non auctor eget, venenatis sed ante.
+				</p>
+			</section>
+			<section id="three">
+				<h1>Section three <span class="hint" ng-click="selector='#three'">#three</span></h1>
+				<input type="text" name="texty" value="bang! Bang!">
+				<input type="checkbox" name="checky">
+				<p>
+					Cras commodo lacus quam, eu convallis sem dictum id. Maecenas imperdiet tincidunt tempus. Phasellus id nunc ultrices, ullamcorper dui id, blandit nisl. Etiam sit amet venenatis tellus. Nunc euismod metus nec laoreet maximus. Donec lectus lacus, maximus non enim vitae, consectetur consequat augue. Morbi placerat lacinia enim, eget fermentum orci vehicula dignissim. Etiam sagittis ligula at neque imperdiet, non lacinia erat pellentesque.
+				</p>
+				<p>
+					In sodales, felis in sodales fermentum, odio ipsum venenatis justo, sed efficitur diam felis ut purus. Cras pretium sollicitudin ipsum, eu posuere justo euismod eget. Praesent neque eros, varius vel turpis ac, convallis mattis urna. Praesent sodales eget risus vitae interdum. Maecenas vestibulum justo vel tincidunt varius. Suspendisse nec suscipit neque. Suspendisse vitae nulla ligula. Integer sit amet erat ut orci vulputate ultrices quis non nisl. Nulla eleifend accumsan ligula et aliquet. Praesent enim massa, vulputate non auctor eget, venenatis sed ante.
+				</p>
+			</section>
+		</div>
+		
+	</div>
+</body>
+</html>

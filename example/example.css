@@ -1,0 +1,61 @@
+body {
+    margin: 0;
+    font-family: PT Serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.sidebar {
+    position: fixed;
+    width: 300px;
+    top: 0;
+    left: 0;
+    color: white;
+    background: #70bbfb;
+    bottom: 0;
+}
+
+.menu-element {
+    height: 40px;
+    line-height: 40px;
+    padding-left: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.menu {
+    padding: 10px 15px;
+}
+
+.menu-element a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.content {
+    padding-left: 320px;
+    padding-right: 20px;
+}
+.image--small {
+    float: left;
+    margin: 0 10px 10px 0
+}
+p {
+    font-size: 16px;
+    line-height: 1.5;
+}
+input {
+    font-family: PT Serif;
+    font-size: 16px;
+}
+button {
+    font-family: PT Serif;
+    font-size: 18px;
+}
+h1 .hint {
+    opacity: .4;
+    cursor: pointer;
+    transition: opacity .2s;
+}
+h1 .hint:hover {
+    opacity: .7;
+}
