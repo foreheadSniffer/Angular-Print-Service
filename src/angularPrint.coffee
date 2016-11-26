@@ -72,7 +72,7 @@ angular.module 'angularPrint', []
       $head = $doc.find("head")
       $body = $doc.find("body")
 #     add base tag to ensure elements use the parent domain
-      $head.append('<base href="' + document.location.protocol + '//' + document.location.host + '">')
+      $head.append("<base href='#{document.location.protocol}//#{document.location.host}/#{document.location.pathname}'>")
 
 #     add title of the page
       if (opt.pageTitle)

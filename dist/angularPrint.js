@@ -60,7 +60,7 @@ angular.module('angularPrint', []).service('AngularPrint', [
         $doc = $iframe.contents();
         $head = $doc.find("head");
         $body = $doc.find("body");
-        $head.append('<base href="' + document.location.protocol + '//' + document.location.host + '">');
+        $head.append("<base href='" + document.location.protocol + "//" + document.location.host + "/" + document.location.pathname + "'>");
         if (opt.pageTitle) {
           $head.append("<title>" + opt.pageTitle + "</title>");
         }
