@@ -1,6 +1,9 @@
 # Angular-Print-Service
 Lightweight angular module that allows you to print element on the page. No jQuery needed.
 
+
+[Demo](https://foreheadsniffer.github.io/Angular-Print-Service/example/)
+
 ## How to use
 
 ```javascript
